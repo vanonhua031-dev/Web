@@ -1,0 +1,1117 @@
+```html
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Nguyen - Senior Full-Stack Developer & UI/UX Designer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#030712',
+                            800: '#0f172a',
+                            700: '#1e293b',
+                            600: '#334155'
+                        },
+                        neon: {
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            purple: '#a855f7',
+                            pink: '#ec4899'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(6, 182, 212, 0.3), 0 0 30px rgba(168, 85, 247, 0.2)' },
+                            '100%': { boxShadow: '0 0 35px rgba(6, 182, 212, 0.6), 0 0 60px rgba(168, 85, 247, 0.4)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            pointer-events: none;
+            transition: transform 0.15s ease-out, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Grid Background pattern */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Typing Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-slate-200 font-sans selection:bg-cyan-500 selection:text-white relative overflow-x-hidden">
+
+    <!-- Custom Cursor Glow -->
+    <div id="custom-cursor" class="fixed top-0 left-0 w-8 h-8 rounded-full border border-cyan-400/50 bg-cyan-400/10 z-50 transform -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
+
+    <!-- Background Particle Canvas -->
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+    
+    <!-- Ambient Background Lighting -->
+    <div class="fixed top-1/4 left-1/4 w-96 h-96 bg-cyan-600/15 rounded-full filter blur-[120px] pointer-events-none z-0 animate-pulse-glow"></div>
+    <div class="fixed bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/15 rounded-full filter blur-[120px] pointer-events-none z-0 animate-pulse-glow" style="animation-delay: 1.5s;"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-10 flex flex-col min-h-screen bg-grid-pattern">
+
+        <!-- NAVBAR -->
+        <header class="sticky top-0 z-40 w-full backdrop-blur-xl border-b border-slate-800/80 bg-dark-900/70 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                <!-- Logo -->
+                <a href="#hero" class="group flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 p-[2px] transition-transform duration-300 group-hover:scale-110">
+                        <div class="w-full h-full bg-dark-900 rounded-[10px] flex items-center justify-center font-mono font-bold text-cyan-400 text-lg">
+                            &lt;/&gt;
+                        </div>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-white font-sans">
+                        <span id="nav-display-name">Alex</span><span class="text-cyan-400">.dev</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md">
+                    <a href="#about" class="px-5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-full transition-all">About</a>
+                    <a href="#skills" class="px-5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-full transition-all">Skills</a>
+                    <a href="#projects" class="px-5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-full transition-all">Projects</a>
+                    <a href="#experience" class="px-5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-full transition-all">Experience</a>
+                    <a href="#contact" class="px-5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-full transition-all">Contact</a>
+                </nav>
+
+                <!-- Actions Right -->
+                <div class="flex items-center gap-3">
+                    <!-- Quick Edit Button -->
+                    <button id="btn-open-editor" class="p-2.5 text-slate-400 hover:text-cyan-400 bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 rounded-xl transition-all" title="Chỉnh sửa nhanh thông tin">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+
+                    <!-- Contact Hire Me Button -->
+                    <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                        <span>Hire Me</span>
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2.5 text-slate-300 hover:text-white bg-slate-800/60 rounded-xl border border-slate-700/50">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer -->
+            <div id="mobile-menu" class="hidden md:hidden border-b border-slate-800 bg-dark-900/95 backdrop-blur-2xl px-4 pt-2 pb-6 space-y-2">
+                <a href="#about" class="mobile-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white">About</a>
+                <a href="#skills" class="mobile-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Skills</a>
+                <a href="#projects" class="mobile-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Projects</a>
+                <a href="#experience" class="mobile-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Experience</a>
+                <a href="#contact" class="mobile-link block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Contact</a>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="min-h-[calc(100vh-5rem)] flex items-center justify-center py-16 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                    
+                    <!-- Left Column: Bio / Text -->
+                    <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                        
+                        <!-- Status Badge -->
+                        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs sm:text-sm font-medium backdrop-blur-md">
+                            <span class="relative flex h-2.5 w-2.5">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+                            </span>
+                            <span id="display-status">Sẵn sàng tiếp nhận dự án mới</span>
+                        </div>
+
+                        <!-- Main Heading -->
+                        <div class="space-y-3">
+                            <h2 class="text-slate-400 text-lg sm:text-xl font-medium tracking-wide">Xin chào, tôi là</h2>
+                            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-none">
+                                <span id="display-name" class="text-gradient">Alex Nguyen</span>
+                            </h1>
+                            <div class="h-12 flex items-center justify-center lg:justify-start text-2xl sm:text-3xl font-bold text-slate-300 font-mono">
+                                <span class="mr-2 text-cyan-400">&gt;</span>
+                                <span id="typing-text" class="typing-cursor text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"></span>
+                            </div>
+                        </div>
+
+                        <!-- Bio Description -->
+                        <p id="display-bio" class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                            Kỹ sư phần mềm Full-Stack với hơn 5 năm kinh nghiệm chuyên sâu thiết kế và xây dựng các hệ thống Web & Mobile hiện đại, tối ưu hiệu năng cao và nâng tầm trải nghiệm người dùng theo tiêu chuẩn quốc tế.
+                        </p>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <a href="#projects" class="px-7 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:opacity-95 shadow-xl shadow-cyan-500/25 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                                <span>Xem Dự Án</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                            <button id="btn-open-cv" class="px-7 py-3.5 rounded-xl font-semibold text-slate-200 glass-panel hover:bg-slate-800/80 hover:text-white border border-slate-700 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                                <i class="fa-solid fa-file-arrow-down text-cyan-400"></i>
+                                <span>Xem & Tải CV</span>
+                            </button>
+                        </div>
+
+                        <!-- Quick Social Links -->
+                        <div class="pt-4 flex items-center justify-center lg:justify-start gap-4 text-slate-400">
+                            <span class="text-xs uppercase tracking-widest text-slate-500 font-semibold mr-2">Kết nối:</span>
+                            <a href="#" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center hover:text-cyan-400 hover:border-cyan-500/50 transition-all transform hover:-translate-y-1"><i class="fa-brands fa-github text-lg"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center hover:text-cyan-400 hover:border-cyan-500/50 transition-all transform hover:-translate-y-1"><i class="fa-brands fa-linkedin-in text-lg"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center hover:text-cyan-400 hover:border-cyan-500/50 transition-all transform hover:-translate-y-1"><i class="fa-brands fa-facebook text-lg"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center hover:text-cyan-400 hover:border-cyan-500/50 transition-all transform hover:-translate-y-1"><i class="fa-brands fa-telegram text-lg"></i></a>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Interactive 3D Tilt Card Avatar -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div id="avatar-card" class="relative group w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-3xl p-1 bg-gradient-to-tr from-cyan-500 via-purple-500 to-pink-500 shadow-2xl shadow-cyan-500/20 transition-transform duration-200 ease-out">
+                            <div class="w-full h-full bg-dark-900 rounded-[22px] overflow-hidden relative flex items-center justify-center p-2">
+                                <img id="display-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Avatar" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-dark-900/90 via-transparent to-transparent"></div>
+                                
+                                <!-- Floating Tech Badges -->
+                                <div class="absolute bottom-4 left-4 right-4 p-3 rounded-xl glass-panel border border-white/10 flex items-center justify-between animate-float">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></div>
+                                        <div>
+                                            <p class="text-xs text-slate-400 font-mono">Location</p>
+                                            <p id="display-location" class="text-xs font-semibold text-white">Tp. Hồ Chí Minh, VN</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-mono px-2 py-1 bg-cyan-500/20 text-cyan-300 rounded border border-cyan-500/30">Senior Dev</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Stats Counter Row -->
+                <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                    <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-cyan-400 font-mono mb-1"><span class="counter" data-target="5">0</span>+</div>
+                        <p class="text-xs sm:text-sm text-slate-400 font-medium">Năm Kinh Nghiệm</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-purple-400 font-mono mb-1"><span class="counter" data-target="48">0</span>+</div>
+                        <p class="text-xs sm:text-sm text-slate-400 font-medium">Dự Án Hoàn Thành</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-pink-400 font-mono mb-1"><span class="counter" data-target="30">0</span>+</div>
+                        <p class="text-xs sm:text-sm text-slate-400 font-medium">Khách Hàng Hài Lòng</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center border border-slate-800">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-blue-400 font-mono mb-1"><span class="counter" data-target="99.8">0</span>%</div>
+                        <p class="text-xs sm:text-sm text-slate-400 font-medium">Code Quality & SLA</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ABOUT ME SECTION -->
+        <section id="about" class="py-24 relative border-t border-slate-800/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-semibold mb-2">Giới thiệu</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Đam mê sáng tạo trải nghiệm số hoàn hảo</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-6 space-y-6">
+                        <h4 class="text-2xl font-bold text-slate-100">Xây dựng ứng dụng hiện đại, linh hoạt & dễ mở rộng</h4>
+                        <p class="text-slate-300 leading-relaxed">
+                            Tôi bắt đầu hành trình lập trình từ niềm đam mê giải quyết các bài toán phức tạp bằng công nghệ. Với tư duy chú trọng vào người dùng và kiến trúc phần mềm chuẩn mực, tôi tạo ra các giải pháp chuyển đổi ý tưởng kinh doanh thành sản phẩm số ấn tượng.
+                        </p>
+                        <p class="text-slate-400 leading-relaxed">
+                            Thế mạnh cốt lõi của tôi bao gồm thiết kế giao diện linh hoạt (UI/UX), phát triển các dịch vụ Microservices quy mô lớn, tối ưu hóa cơ sở dữ liệu và tự động hóa quy trình CI/CD.
+                        </p>
+
+                        <!-- Key Highlights Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                            <div class="p-4 rounded-xl glass-card flex items-start gap-3">
+                                <div class="p-2.5 bg-cyan-500/10 text-cyan-400 rounded-lg"><i class="fa-solid fa-code text-lg"></i></div>
+                                <div>
+                                    <h5 class="text-sm font-semibold text-white">Clean Code</h5>
+                                    <p class="text-xs text-slate-400 mt-0.5">Dễ bảo trì, dễ mở rộng và chuẩn convention.</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-xl glass-card flex items-start gap-3">
+                                <div class="p-2.5 bg-purple-500/10 text-purple-400 rounded-lg"><i class="fa-solid fa-bolt text-lg"></i></div>
+                                <div>
+                                    <h5 class="text-sm font-semibold text-white">High Performance</h5>
+                                    <p class="text-xs text-slate-400 mt-0.5">Tối ưu hóa tốc độ tải và trải nghiệm mượt mà.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack Highlights Grid -->
+                    <div class="lg:col-span-6">
+                        <div class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+                            <h4 class="text-lg font-bold text-white flex items-center justify-between">
+                                <span>Công nghệ cốt lõi</span>
+                                <span class="text-xs font-mono text-cyan-400">Stack 2026</span>
+                            </h4>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1 font-medium">
+                                        <span class="text-slate-200">Frontend (React / Next.js / Vue / Tailwind)</span>
+                                        <span class="text-cyan-400 font-mono">95%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: 95%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1 font-medium">
+                                        <span class="text-slate-200">Backend (Node.js / Python / Go / Postgres)</span>
+                                        <span class="text-purple-400 font-mono">90%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" style="width: 90%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1 font-medium">
+                                        <span class="text-slate-200">UI/UX Design & Architecture (Figma / System)</span>
+                                        <span class="text-pink-400 font-mono">88%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" style="width: 88%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1 font-medium">
+                                        <span class="text-slate-200">Cloud & DevOps (Docker / AWS / Kubernetes)</span>
+                                        <span class="text-emerald-400 font-mono">82%</span>
+                                    </div>
+                                    <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-pink-500 to-emerald-400 rounded-full" style="width: 82%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills" class="py-24 bg-dark-800/40 border-t border-slate-800/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-semibold mb-2">Kỹ năng & Công cụ</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Hệ sinh thái công nghệ sử dụng</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Skill Card 1 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl">
+                            <i class="fa-brands fa-react"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Frontend Dev</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400 text-xs"></i> React.js / Next.js 14</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400 text-xs"></i> TypeScript / JS (ES6+)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400 text-xs"></i> Tailwind CSS / Sass</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400 text-xs"></i> Redux Toolkit / Zustand</li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 2 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Backend Dev</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400 text-xs"></i> Node.js / Express / NestJS</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400 text-xs"></i> Python / FastAPI / Django</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400 text-xs"></i> PostgreSQL / MongoDB / Redis</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400 text-xs"></i> RESTful & GraphQL APIs</li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 3 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">DevOps & Cloud</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400 text-xs"></i> Docker / Containerization</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400 text-xs"></i> AWS (EC2, S3, Lambda)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400 text-xs"></i> CI/CD Pipeline (GitHub Actions)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400 text-xs"></i> Nginx / Vercel / Cloudflare</li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 4 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">UI/UX & Tools</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Figma / Design Systems</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Wireframing & Prototyping</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Git / GitHub / GitLab</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400 text-xs"></i> Agile / Scrum Methodology</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-24 relative border-t border-slate-800/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-semibold mb-2">Sản phẩm nổi bật</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Các dự án tiêu biểu</h3>
+                </div>
+
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-12">
+                    <button class="project-filter-btn active px-5 py-2 rounded-xl text-sm font-medium transition-all bg-cyan-500 text-white shadow-lg shadow-cyan-500/25" data-filter="all">Tất cả</button>
+                    <button class="project-filter-btn px-5 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white glass-panel border border-slate-800 transition-all" data-filter="webapp">Web App</button>
+                    <button class="project-filter-btn px-5 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white glass-panel border border-slate-800 transition-all" data-filter="mobile">Mobile</button>
+                    <button class="project-filter-btn px-5 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white glass-panel border border-slate-800 transition-all" data-filter="ai">AI / ML</button>
+                </div>
+
+                <!-- Projects Grid -->
+                <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1 -->
+                    <div class="project-card glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col group" data-category="webapp">
+                        <div class="relative overflow-hidden h-52">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="E-Commerce Dashboard" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-dark-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-sm">
+                                <button onclick="openDemoModal('Nexus Analytics Dashboard', 'Hệ thống quản trị thương mại điện tử thời gian thực với AI dự báo doanh thu.', 'React, Next.js, Tailwind, Chart.js, Node.js')" class="px-4 py-2 bg-cyan-500 text-white rounded-xl text-sm font-semibold hover:bg-cyan-400 transition-all">Live Demo</button>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md">Web App</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Nexus Analytics Platform</h4>
+                                <p class="text-slate-400 text-sm mt-2 line-clamp-2">Nền tảng phân tích chỉ số kinh doanh SaaS thời gian thực tích hợp trí tuệ nhân tạo.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-800/80">
+                                <span class="text-xs font-mono text-slate-400">#Next.js</span>
+                                <span class="text-xs font-mono text-slate-400">#TypeScript</span>
+                                <span class="text-xs font-mono text-slate-400">#Tailwind</span>
+                                <span class="text-xs font-mono text-slate-400">#ChartJS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="project-card glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col group" data-category="ai">
+                        <div class="relative overflow-hidden h-52">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="AI Workspace" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-dark-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-sm">
+                                <button onclick="openDemoModal('VisionAI Workspace', 'Công cụ thiết kế & tự động hoá content truyền thông sử dụng OpenAI API.', 'Vue 3, Python FastAPI, OpenAI API, Redis')" class="px-4 py-2 bg-purple-500 text-white rounded-xl text-sm font-semibold hover:bg-purple-400 transition-all">Live Demo</button>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-mono text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-md">AI / ML</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">VisionAI Content Suite</h4>
+                                <p class="text-slate-400 text-sm mt-2 line-clamp-2">Trợ lý sáng tạo hình ảnh và nội dung tự động đa nền tảng tối ưu hoá SEO.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-800/80">
+                                <span class="text-xs font-mono text-slate-400">#Python</span>
+                                <span class="text-xs font-mono text-slate-400">#FastAPI</span>
+                                <span class="text-xs font-mono text-slate-400">#OpenAI</span>
+                                <span class="text-xs font-mono text-slate-400">#Vue3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project-card glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col group" data-category="mobile">
+                        <div class="relative overflow-hidden h-52">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80" alt="Fintech App" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-dark-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-sm">
+                                <button onclick="openDemoModal('PayPulse Fintech App', 'Ứng dụng ví điện tử & quản lý tài chính cá nhân đa tiền tệ.', 'React Native, Node.js, Microservices, PostgreSQL')" class="px-4 py-2 bg-pink-500 text-white rounded-xl text-sm font-semibold hover:bg-pink-400 transition-all">Live Demo</button>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-mono text-pink-400 bg-pink-500/10 px-2.5 py-1 rounded-md">Mobile</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-white group-hover:text-pink-400 transition-colors">PayPulse Mobile Banking</h4>
+                                <p class="text-slate-400 text-sm mt-2 line-clamp-2">Ví điện tử thông minh với bảo mật sinh trắc học và thanh toán mã QR tức thì.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-800/80">
+                                <span class="text-xs font-mono text-slate-400">#React Native</span>
+                                <span class="text-xs font-mono text-slate-400">#NodeJS</span>
+                                <span class="text-xs font-mono text-slate-400">#Postgres</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE TIMELINE -->
+        <section id="experience" class="py-24 bg-dark-800/40 border-t border-slate-800/60">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-semibold mb-2">Lộ trình sự nghiệp</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Kinh nghiệm & Học vấn</h3>
+                </div>
+
+                <!-- Timeline Container -->
+                <div class="relative border-l-2 border-slate-800 left-2 sm:left-1/2 -ml-0.5 space-y-12">
+                    
+                    <!-- Timeline Item 1 -->
+                    <div class="relative flex flex-col sm:flex-row items-start group">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-cyan-500 ring-4 ring-dark-900 group-hover:scale-125 transition-transform"></div>
+                        <div class="sm:w-1/2 sm:pr-8 sm:text-right pl-6 sm:pl-0">
+                            <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">2023 - Hiện tại</span>
+                            <h4 class="text-lg font-bold text-white mt-2">Senior Full-Stack Developer</h4>
+                            <p class="text-sm font-medium text-slate-400">TechCorp Global Tech</p>
+                        </div>
+                        <div class="sm:w-1/2 sm:pl-8 pl-6 pt-2 sm:pt-0">
+                            <div class="glass-card p-5 rounded-2xl border border-slate-800 text-sm text-slate-300">
+                                Lãnh đạo team 8 kỹ sư phát triển sản phẩm SaaS phục vụ 200k+ người dùng hàng tháng. Tối ưu hiệu năng giảm 40% latency API.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 2 -->
+                    <div class="relative flex flex-col sm:flex-row items-start group">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-purple-500 ring-4 ring-dark-900 group-hover:scale-125 transition-transform"></div>
+                        <div class="sm:w-1/2 sm:pr-8 sm:text-right pl-6 sm:pl-0">
+                            <span class="text-xs font-mono text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">2021 - 2023</span>
+                            <h4 class="text-lg font-bold text-white mt-2">Frontend Engineer</h4>
+                            <p class="text-sm font-medium text-slate-400">Innovate Software Agency</p>
+                        </div>
+                        <div class="sm:w-1/2 sm:pl-8 pl-6 pt-2 sm:pt-0">
+                            <div class="glass-card p-5 rounded-2xl border border-slate-800 text-sm text-slate-300">
+                                Phát triển giao diện người dùng bằng React/Next.js cho hơn 15 dự án Fintech và E-commerce lớn nhỏ.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 3 -->
+                    <div class="relative flex flex-col sm:flex-row items-start group">
+                        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-pink-500 ring-4 ring-dark-900 group-hover:scale-125 transition-transform"></div>
+                        <div class="sm:w-1/2 sm:pr-8 sm:text-right pl-6 sm:pl-0">
+                            <span class="text-xs font-mono text-pink-400 bg-pink-500/10 px-3 py-1 rounded-full border border-pink-500/20">2017 - 2021</span>
+                            <h4 class="text-lg font-bold text-white mt-2">Cử nhân Khoa học Máy tính</h4>
+                            <p class="text-sm font-medium text-slate-400">Đại học Công Nghệ / UIT</p>
+                        </div>
+                        <div class="sm:w-1/2 sm:pl-8 pl-6 pt-2 sm:pt-0">
+                            <div class="glass-card p-5 rounded-2xl border border-slate-800 text-sm text-slate-300">
+                                Tốt nghiệp loại Giỏi. Đạt giải Nhất Hackathon sinh viên công nghệ cấp thành phố.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-24 relative border-t border-slate-800/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-semibold mb-2">Liên hệ</h2>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Hãy bắt đầu dự án tiếp theo cùng nhau!</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    
+                    <!-- Contact Information Side -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+                            <h4 class="text-xl font-bold text-white">Thông tin kết nối</h4>
+                            <p class="text-slate-400 text-sm">
+                                Bạn đang tìm kiếm một kỹ sư lập trình đồng hành cùng dự án hoặc cần tư vấn giải pháp số? Hãy gửi tin nhắn ngay cho tôi!
+                            </p>
+
+                            <div class="space-y-4 pt-2">
+                                <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
+                                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg">
+                                        <i class="fa-solid fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-400">Email trực tiếp</p>
+                                        <p id="display-email" class="text-sm font-semibold text-white">alex.nguyen@devportfolio.com</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
+                                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-400">Điện thoại / Zalo</p>
+                                        <p id="display-phone" class="text-sm font-semibold text-white">+84 (0) 909 123 456</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
+                                    <div class="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-lg">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-slate-400">Địa điểm làm việc</p>
+                                        <p class="text-sm font-semibold text-white">Tp. Hồ Chí Minh / Remote Worldwide</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form Side -->
+                    <div class="lg:col-span-7">
+                        <form id="contact-form" class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-300 mb-2">Họ và tên *</label>
+                                    <input type="text" required placeholder="Nguyễn Văn A" class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-300 mb-2">Địa chỉ Email *</label>
+                                    <input type="email" required placeholder="you@company.com" class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-2">Chủ đề cần trao đổi</label>
+                                <input type="text" placeholder="Phát triển Web App / Tư vấn dự án..." class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-2">Nội dung tin nhắn *</label>
+                                <textarea rows="4" required placeholder="Mô tả chi tiết về dự án hoặc yêu cầu công việc của bạn..." class="w-full px-4 py-3 rounded-xl bg-dark-900/80 border border-slate-700/80 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors resize-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:opacity-95 shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Gửi Tin Nhắn Cho Alex</span>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-8 border-t border-slate-800/80 bg-dark-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-slate-500 text-center sm:text-left">
+                    &copy; 2026 Alex Nguyen Portfolio. Crafted with passion & Next-Gen Tech.
+                </p>
+
+                <!-- Back to top button -->
+                <a href="#hero" class="p-2.5 rounded-xl glass-panel text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-all" title="Lên đầu trang">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- MODAL 1: LIVE DEMO PREVIEW -->
+    <div id="demo-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl border border-slate-700 p-6 space-y-6 relative animate-float">
+            <button onclick="closeDemoModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="space-y-2">
+                <span class="text-xs font-mono text-cyan-400">Live Preview Modal</span>
+                <h3 id="modal-title" class="text-2xl font-bold text-white">Project Title</h3>
+                <p id="modal-tech" class="text-xs font-mono text-slate-400">Tech Stack</p>
+            </div>
+            <div class="bg-dark-900 rounded-xl p-4 border border-slate-800 text-slate-300 text-sm leading-relaxed" id="modal-desc">
+                Project description goes here...
+            </div>
+            <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs flex items-center gap-3">
+                <i class="fa-solid fa-circle-info text-base"></i>
+                <span>Đây là chế độ xem giả lập ứng dụng thực tế. Bạn có thể liên kết trực tiếp đường dẫn Live Demo của bạn tại đây!</span>
+            </div>
+            <div class="flex justify-end gap-3 pt-2">
+                <button onclick="closeDemoModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700">Đóng</button>
+                <a href="#" target="_blank" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-cyan-500 hover:bg-cyan-400 shadow-md shadow-cyan-500/20">Mở Trang Demo Gốc</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CV VIEW & DOWNLOAD MODAL -->
+    <div id="cv-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md">
+        <div class="glass-panel w-full max-w-xl rounded-3xl border border-slate-700 p-6 space-y-6 relative">
+            <button onclick="closeCvModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl text-2xl"><i class="fa-solid fa-file-pdf"></i></div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Curriculum Vitae (CV)</h3>
+                    <p class="text-xs text-slate-400">Cập nhật lần cuối: Tháng 10/2026</p>
+                </div>
+            </div>
+            <div class="border border-slate-800 rounded-xl p-4 bg-dark-900/60 space-y-3">
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>Tên tệp:</span>
+                    <span class="font-mono text-cyan-400">Alex_Nguyen_Senior_FullStack.pdf</span>
+                </div>
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>Dung lượng:</span>
+                    <span class="font-mono text-slate-400">1.8 MB</span>
+                </div>
+                <div class="flex justify-between text-xs text-slate-300">
+                    <span>Định dạng:</span>
+                    <span class="font-mono text-slate-400">PDF chuẩn Quốc Tế</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <button onclick="closeCvModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700">Đóng</button>
+                <button onclick="downloadCvSimulated()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 shadow-md shadow-cyan-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Tải CV Xuống</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK CUSTOMIZE DRAWER (SIDEBAR EDIT) -->
+    <div id="custom-drawer" class="fixed top-0 right-0 h-full w-full sm:w-96 glass-panel border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 p-6 flex flex-col justify-between overflow-y-auto">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i>
+                    <h3 class="font-bold text-white text-lg">Chỉnh sửa nhanh Profile</h3>
+                </div>
+                <button id="btn-close-editor" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Họ và Tên</label>
+                    <input id="edit-name" type="text" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Trạng thái làm việc</label>
+                    <input id="edit-status" type="text" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Mô tả ngắn (Bio)</label>
+                    <textarea id="edit-bio" rows="3" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Link Ảnh Avatar URL</label>
+                    <input id="edit-avatar" type="text" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Địa điểm</label>
+                    <input id="edit-location" type="text" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Email liên hệ</label>
+                    <input id="edit-email" type="email" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Số điện thoại</label>
+                    <input id="edit-phone" type="text" class="w-full px-3 py-2 rounded-lg bg-dark-900 border border-slate-700 text-white focus:outline-none focus:border-cyan-500">
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-6 border-t border-slate-800">
+            <button id="btn-save-custom" class="w-full py-3 rounded-xl font-bold text-white bg-cyan-500 hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20">
+                Cập Nhật Ngay
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden glass-panel border border-cyan-500/40 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-sm text-white animate-bounce">
+        <i class="fa-solid fa-circle-check text-cyan-400 text-lg"></i>
+        <span id="toast-msg">Đã gửi tin nhắn thành công!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. TYPING EFFECT LOGIC
+        const typingRoles = ["Full-Stack Developer", "UI/UX Designer", "Software Architect", "Problem Solver"];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById("typing-text");
+
+        function typeEffect() {
+            const currentRole = typingRoles[roleIndex];
+            if (isDeleting) {
+                typingElement.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                typeSpeed = 2000; // Pause at end
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % typingRoles.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        // 2. CANVAS PARTICLES BACKGROUND
+        const canvas = document.getElementById("bg-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.8 + 0.2;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(6, 182, 212, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.floor((window.innerWidth * window.innerHeight) / 15000);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        // 3. STATS COUNTER ANIMATION
+        function startCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCount = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = current > 10 ? Math.ceil(current) : current.toFixed(1);
+                        setTimeout(updateCount, 16);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // 4. CUSTOM CURSOR
+        const cursor = document.getElementById("custom-cursor");
+        window.addEventListener("mousemove", (e) => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // 5. 3D CARD TILT EFFECT
+        const avatarCard = document.getElementById("avatar-card");
+        if (avatarCard) {
+            avatarCard.addEventListener("mousemove", (e) => {
+                const rect = avatarCard.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                avatarCard.style.transform = `perspective(1000px) rotateX(${-y / 12}deg) rotateY(${x / 12}deg)`;
+            });
+            avatarCard.addEventListener("mouseleave", () => {
+                avatarCard.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+            });
+        }
+
+        // 6. PROJECT FILTERS
+        const filterBtns = document.querySelectorAll('.project-filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-cyan-500', 'text-white', 'shadow-lg', 'shadow-cyan-500/25');
+                    b.classList.add('text-slate-400', 'glass-panel');
+                });
+                btn.classList.add('active', 'bg-cyan-500', 'text-white', 'shadow-lg', 'shadow-cyan-500/25');
+                btn.classList.remove('text-slate-400', 'glass-panel');
+
+                const filter = btn.getAttribute('data-filter');
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 7. MODALS LOGIC
+        function openDemoModal(title, desc, tech) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-tech').innerText = "Tech: " + tech;
+            document.getElementById('demo-modal').classList.remove('hidden');
+        }
+        function closeDemoModal() {
+            document.getElementById('demo-modal').classList.add('hidden');
+        }
+
+        const cvModal = document.getElementById('cv-modal');
+        document.getElementById('btn-open-cv').addEventListener('click', () => {
+            cvModal.classList.remove('hidden');
+        });
+        function closeCvModal() {
+            cvModal.classList.add('hidden');
+        }
+        function downloadCvSimulated() {
+            showToast("Đang tải xuống CV bản PDF...");
+            closeCvModal();
+        }
+
+        // 8. TOAST NOTIFICATION
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            document.getElementById("toast-msg").innerText = message;
+            toast.classList.remove("hidden");
+            setTimeout(() => {
+                toast.classList.add("hidden");
+            }, 3500);
+        }
+
+        // Form Submit simulation
+        document.getElementById("contact-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            showToast("Cảm ơn bạn! Tin nhắn đã được gửi tới Alex thành công.");
+            e.target.reset();
+        });
+
+        // 9. QUICK CUSTOMIZE DRAWER
+        const drawer = document.getElementById("custom-drawer");
+        const btnOpenEditor = document.getElementById("btn-open-editor");
+        const btnCloseEditor = document.getElementById("btn-close-editor");
+        const btnSaveCustom = document.getElementById("btn-save-custom");
+
+        // Sync values into editor inputs on open
+        btnOpenEditor.addEventListener("click", () => {
+            document.getElementById("edit-name").value = document.getElementById("display-name").innerText;
+            document.getElementById("edit-status").value = document.getElementById("display-status").innerText;
+            document.getElementById("edit-bio").value = document.getElementById("display-bio").innerText;
+            document.getElementById("edit-avatar").value = document.getElementById("display-avatar").src;
+            document.getElementById("edit-location").value = document.getElementById("display-location").innerText;
+            document.getElementById("edit-email").value = document.getElementById("display-email").innerText;
+            document.getElementById("edit-phone").value = document.getElementById("display-phone").innerText;
+
+            drawer.classList.remove("translate-x-full");
+        });
+
+        btnCloseEditor.addEventListener("click", () => {
+            drawer.classList.add("translate-x-full");
+        });
+
+        btnSaveCustom.addEventListener("click", () => {
+            const newName = document.getElementById("edit-name").value;
+            document.getElementById("display-name").innerText = newName;
+            document.getElementById("nav-display-name").innerText = newName.split(" ")[0] || newName;
+            document.getElementById("display-status").innerText = document.getElementById("edit-status").value;
+            document.getElementById("display-bio").innerText = document.getElementById("edit-bio").value;
+            document.getElementById("display-avatar").src = document.getElementById("edit-avatar").value;
+            document.getElementById("display-location").innerText = document.getElementById("edit-location").value;
+            document.getElementById("display-email").innerText = document.getElementById("edit-email").value;
+            document.getElementById("display-phone").innerText = document.getElementById("edit-phone").value;
+
+            drawer.classList.add("translate-x-full");
+            showToast("Cập nhật thông tin Profile thành công!");
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById("mobile-menu-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        mobileBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+        document.querySelectorAll(".mobile-link").forEach(link => {
+            link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+        });
+
+        // ON LOAD INITIALIZATION
+        window.addEventListener("load", () => {
+            typeEffect();
+            resizeCanvas();
+            initParticles();
+            animateParticles();
+            startCounters();
+        });
+
+        window.addEventListener("resize", () => {
+            resizeCanvas();
+            initParticles();
+        });
+    </script>
+</body>
+</html>
+```
